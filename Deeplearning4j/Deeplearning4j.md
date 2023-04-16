@@ -42,7 +42,7 @@ _class: lead
 
 # Eclipse Deeplearning4j(DL4J) 란?
 
-![left width:300px](./image/Deeplearning4j/eclipse_dl4j.png)
+![left width:300px](./eclipse_dl4j.png)
 
 - [Eclipse Foundation](https://www.eclipse.org/)의 [Eclipse Project](https://projects.eclipse.org/projects/technology.deeplearning4j) 중 하나로 AI가 통합된 애플리케이션을 빌드하는 데에 필수적인 핵심 core 모듈을 제공
 - 이를 통해 딥러닝 애플리케이션 구축을 위한 기본값을 제공하는 것이 전반적인 목표
@@ -123,7 +123,7 @@ Maven pom.xml
 ---
 
 # Model import and deployment
-![](./image/Deeplearning4j/mnist_digits.png)
+![](./mnist_digits.png)
 
 - 유명한 MNIST - Multi Layer Perceptron 문제를 예제로 사용
 - 28x28 이미지를 보고 숫자 0~9 까지를 예측하는 문제
