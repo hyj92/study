@@ -5,7 +5,7 @@ html: true
 theme: gaia
 _class: [invert, lead]
 style: |
-    center {
+    p {
         text-align: center;
     }
 ---
@@ -25,40 +25,105 @@ style: |
 ---
 
 # 배경
+- N사의 모든 모바일 게임(약 30종 * android/ios * 지원 국가)의 안정적인 운영을 위한 크래시 리포트 시스템 
+  - 모바일 앱에서의 오류 추적 및 성능, 상태를 모니터링하는 시스템
+- 당시 약 5년동안 사용되고, 운영
+- 게임 론칭 ~ 운영 하면서 필수 플랫폼
+  
+---
 
-- 5년동안 사용되고, 운영되어 온 시스템 -> 잦은 담당 조직 이동 -> 방향성 상실
-- 수동 업무가 많은 운영 업무, 프로젝트가 더 크기 위한 환경이 필요 
-- 운영 : 데이터 추출 업무, 서버 운영 환경 (Kubernetes 미사용, 컨테이너 환경 사용하지 않아 인스턴스 직접 발급받아 환경세팅, DB/NAS(File Server)/Symbolicator 와 같은 물리 장비 세팅과 요청)
-    파일 스토리지에 대한 auto-scaling 기능이 없어 수동 관리
-- 빅데이터 : DB 샤딩 구조 -> 많은 인스턴스 관리 부담, DB 인스턴스 발급, 세팅, 반납 부담
-    DB로 데이터 밸런싱을 수동으로 진행하고 있던 점 -> 이 때문에 새로운 게임이 생길 때마다 직접 DB 용량을 확인 후 마이그레이션
-    여러 대의 DB 관리를 위해 Zookeeper 등의 3rd party 서버를 사용, DB 정보를 가져오기 위해 모듈을 만들어 사용
-- 레거시 코드 : 대시보드 - 레거시 코드들이 남아있음, 레거시 테이블 등이 많이 남아있음 의미 불명의 테이블들...
+# 배경
+- **수동 및 운영 업무**
+  - 수동 업무가 많은 운영 업무 (운영에 필요한 인력 최소 3명)
+  - 개발사별 데이터 추출 업무
+  - Auto-scalable 하지 않은 서버 환경
+    - DB, NAS(File Storage), Symbolicator 외 다수 인스턴스 발급/반납 
+  - 수동 관리가 필요한 DB 샤딩 구조 
+    - 수동 샤딩키 발급 -> 게임 론칭 및 클로징 시 직접 마이그레이션
+    - 여러 대의 DB 관리를 위해 Zookeeper 서버 사용, DB 정보를 가져오기 위해 모듈을 만들어 사용
+---
+
+# 배경
+- **레거시 코드**
+  - 흩어진 앱 별 예외처리 코드 레거시 코드들이 남아있음, 레거시 테이블 등이 많이 남아있음 의미 불명의 테이블들...
     리시버, 콜렉터, 심볼리케이터 - 컴포넌트 별로 역할이 겹치고, 코드가 분산되어 있음 (리시버, 콜렉터에서도 로그를 가공하는 처리 수행, 콜렉터와 심볼리케이터 모두 그룹핑 수행 등)
-- 성능 : 대시보드 성능 개선, 집계 방식 개선 (데이터 저장 구조로 인해 집계 추출시 오래 걸리는 점), symbolicator 가 mac에 올려두고 사용중인데 새로운 바이너리 리서치하여 linux 환경에서 동작하도록 수정
+- **성능**
+  -대시보드 성능 개선, 집계 방식 개선 (데이터 저장 구조로 인해 집계 추출시 오래 걸리는 점), symbolicator 가 mac에 올려두고 사용중인데 새로운 바이너리 리서치하여 linux 환경에서 동작하도록 수정
 - 개발 환경 변경
-- GCP 에 익숙하지 않는 경우 힘들 수 있으나 개발, CI/CD 에 유리한 구성 및 컴포넌트들을 가지고 있음 (Composer, Cloud Code, Cloud Repo 등...)
+  - GCP 에 익숙하지 않는 경우 힘들 수 있으나 개발, CI/CD 에 유리한 구성 및 컴포넌트들을 가지고 있음 (Composer, Cloud Code, Cloud Repo 등...)
+
 ---
 
 # 목표
 
- 시스템 구조와 환경을 변경하여 문제 개선, 운영 인력 감축 및 운영하기 좋은 환경으로 개선
+시스템 구조와 환경을 변경하여 아래 문제를 개선
 
+**수동 업무 개선**
+
+**운영 인력 감축**
+
+**레거시 코드와 테이블 제거**
+
+**성능 개선**
+
+
+---
+
+# AS-IS
+
+![width:1100px](./crashreport_arch_asis.png)
 
 ---
 
 # 유지
 
-![](./crashreport_arch.png)
+![bg right:50%](./crashreport_arch_asis_1.png)
 
-- 시스템 구조 변경
-    - AS-IS, TO-BE 비교
-    - AS-IS 그대로 사용한 점: MQ 중앙집중화, DB 수평 샤딩 (앱 별), 데이터 집계 (분단위 같이 자주 발생하는)Streaming 파이프라인 분리, DB 와 Edge 서버 가운데 Collector 를 두어 천천히 insert (처리량 불균형 이슈 해결)
+1. MQ 중앙집중화
+2. 데이터 집계 (분단위 같이 자주 발생하는)Streaming 파이프라인 분리
+---
+
+# 유지
+
+![bg right:50%](./crashreport_arch_asis_2.png)
+
+3. DB 샤딩 (앱 별)
+4. DB 와 Edge 서버 가운데 Collector 를 두어 천천히 insertion (처리량 불균형 이슈 해결)
 ---
 
 # 개선
 
-- 수정한 점: 각 컴포넌트의 수행 역할을 분명히 하고, 역할군에 따라 분리 (리시버, 전처리기, 콜렉터, 그룹퍼, 심볼리케이터), DB 샤딩으로 인한 3rd party 서버와 모듈을 모두 사용하지 않도록 middle ware 인 ProdxySQL 도입, DB 성능 사용하는 시/일 단위 데이터 집계 trigger -> 컴포넌트로 분리, 기존 컴포넌트를 GCP 컴포넌트로 대체하여 운영적 이득 (Dataflow 사용하여 Spark 클러스터 앱, 구성 등의 고려X, Redis -> MemoryStore, Kafka -> PubSub, GCP Storage, DB -> CloudSQL)
+![height:460px](./crashreport_arch_tobe.png)
+
+---
+
+# 개선
+
+![height:480px](./crashreport_arch_tobe_layer.png)
+
+---
+
+# 개선
+![bg right width:600px](./component_asis_tobe.png)
+
+1. **Component 역할 분리**
+
+- 각 컴포넌트의 수행 역할을 분명히 하고, 역할군에 따라 분리
+  - 산재된 중복 코드, 예외처리 코드, 역할을 넘나드는 코드
+- Edge Server, Pre-processor, Post-processor(Grouper, Symbolicator, Collector)
+---
+
+# 개선
+2. **Sharding Key 자동화**
+DB 샤딩으로 인한 3rd party 서버와 모듈을 모두 사용하지 않도록 middle ware 인 ProdxySQL 도입
+
+
+
+---
+
+# 개선
+
+DB 성능 사용하는 시/일 단위 데이터 집계 trigger -> 컴포넌트로 분리, 기존 컴포넌트를 GCP 컴포넌트로 대체하여 운영적 이득 (Dataflow 사용하여 Spark 클러스터 앱, 구성 등의 고려X, Redis -> MemoryStore, Kafka -> PubSub, GCP Storage, DB -> CloudSQL)
 - 시스템 환경 변경
     - GCP Kubernetes Engine 사용 -> 모든 컴포넌트 auto-scaling , auto-upgrade 가 가능하여 수동 인스턴스 관리 X
     - GCP 컴포넌트 활용
@@ -66,8 +131,7 @@ style: |
         - Redis, PubSub, Storage, CloudSQL, Dataflow 사용하여 auto-scaling, 올려두고 크게 신경쓰지 않아도 됨. 운영적 이득
 - 개발 환경 변경
     - GCP 에 익숙하지 않는 경우 힘들 수 있으나 개발, CI/CD 에 유리한 구성 및 컴포넌트들을 가지고 있음 (Composer, Cloud Code, Cloud Repo 등...)
-
----
+___
 
 # 느낌점 & 팁
 - 시스템을 전체적으로 개선하려면 시스템에 대한 이해가 높아야하며, 한 번에 이루어지지 않음. 시스템에 맞는 데이터에 맞춰 컴포넌트들을 구성해야하기 때문에 꾸준히 점검해야 하는 듯.
@@ -82,6 +146,9 @@ style: |
 
 --- 
 
+# Speical Thanks
+- 크래시 리포트 시스템은 초기 설계 및 개발, 운영하시고, 시스템 전체 개선에 도움을 주신 **일환님**
+- 
 
 ---
 
