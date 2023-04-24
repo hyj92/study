@@ -51,6 +51,11 @@ style: |
 - 잦은 담당 조직 이동 및 운영 인원 축소
 
 ---
+# 기존
+
+![width:1100px](./crashreport_arch_asis.png)
+
+---
 # 배경
 - **수동 및 운영 업무**
   - 운영에 필요한 백엔드 인력 최소 3명
@@ -65,7 +70,7 @@ style: |
     - 샤딩키 수동 발급 -> 게임 론칭 및 클로징 시 직접 데이터 마이그레이션
     - 여러 대의 DB 관리를 위해 Zookeeper 서버 운영
     - Zookeeper 로부터 DB 정보를 가져오기 위해 모듈을 만들어 사용
-    - 모든 서버 컴포넌트에서 개별 DataStore Connection Pool 관리
+    - 모든 서버 컴포넌트에서 개별 DataSource Connection Pool 관리
 
 ---
 # 배경
@@ -91,17 +96,12 @@ style: |
 
 **수동 업무 개선**
 
-**운영 인력 감축**
-
 **레거시 코드와 테이블 제거**
 
 **성능 개선**
 
+**운영 인력 감축**
 
----
-# 기존
-
-![width:1100px](./crashreport_arch_asis.png)
 
 ---
 # 교훈과 벤치마킹
@@ -167,6 +167,10 @@ style: |
 - BigQuery, Data Studio 사용
 - 필요할 때마다 기간 별로 데이터 추출 X
 - 유저가 원하는 입맛대로 DataStudio 등을 사용하여 대시보드 구성도 가능
+
+---
+# 결과
+![bg height:700px](./crashreport_dashboard_overview.png)
 
 ---
 # 결과
