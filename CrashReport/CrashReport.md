@@ -18,13 +18,11 @@ style: |
         font-size: 20px;
     }
 ---
-
 # **시스템 구조 개선 경험 공유**
 글로벌 플랫폼팀 
 한유진
 
 ---
-
 # Index
 - 배경
 - 목표
@@ -39,15 +37,16 @@ style: |
 
 ---
 # For what?
+
 </br></br>
 ## 도메인 배제한 **백엔드 아키텍처** 공유
 ## 난이도 **중상**
 
 ---
-*키워드, 중복 단어 없애기, 내용은 어느정도 심기
 # 배경
 - N사의 모든 모바일 게임(약 30종 * android/ios * 지원 국가)의 안정적인 운영을 위한 시스템
     - 모바일 게임 앱에서의 오류 추적 및 성능, 상태를 모니터링
+    - 최소 16,000 ~ 최대 100,000 TPS
     - 당시 약 5년 동안 개발 및 운영
 - 잦은 담당 조직 이동 및 운영 인원 축소
 
@@ -132,7 +131,7 @@ style: |
 
 ---
 # 개선
-![bg right width:600px](./component_asis_tobe.png)
+![bg right width:600px](./crashreport_arch_tobe_1.png)
 
 1. **Component 역할 분리**
 - 수행 역할에 따라 컴포넌트 분리
@@ -141,6 +140,7 @@ style: |
 
 ---
 # 개선
+![bg right width:600px](./crashreport_arch_tobe_2.png)
 
 2. **Sharding Key 자동화**
 - 게임 론칭 및 셧다운 시 수동 마이그레이션 불필요
@@ -150,6 +150,7 @@ style: |
 
 ---
 # 개선
+![bg right width:600px](./crashreport_arch_tobe_3.png)
 
 3. **DB 집계 축소**
 - DB 성능 사용하는 시/일 단위 데이터 집계 Trigger -> 컴포넌트로 분리
@@ -197,10 +198,31 @@ style: |
 
 --- 
 # Speical Thanks
-- 크래시 리포트 시스템은 초기 설계 및 개발, 운영하시고, 시스템 전체 개선에도 도움을 주신 **일환님**
+- 이 시스템을 초기 설계, 개발 및 운영하시고, 시스템 전체 개선에도 도움을 주신 **일환님**
 - 시스템 전체 개선 시 옆에서 도움을 주셨던 전 팀장이셨던 **선영님**
 - 이런 좋은 개발 경험을 가질 수 있도록 기회를 선뜻 넘겨주신 **효석님**
+  
+---
+#
+<style scoped>
+    h2 {
+        font-size:100px !important;
+        font-weight: 600 !important;
+    }
+</style>
+</br></br>
+
+## Q&A 
 
 ---
 # Appendix 
 - 크래시 리포트의 A-Z by 일환님 https://highlyscalable.blogspot.com/2023/03/mobile-application-crashreporting.html
+
+---
+# Appendix 
+![height:500px](./log_size.png)
+
+---
+# Appendix 
+![height:500px](./log_rps.png)
+
