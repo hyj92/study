@@ -7,7 +7,7 @@ _class: [invert, lead]
 style: |
     p {
         text-align: center;
-    }ㄴ
+    }
     h2 {
         font-weight: 500;
         text-align: center;
